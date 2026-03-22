@@ -22,7 +22,7 @@ return {
         ["Callback"] = function()
             print("Fly mode activated!") -- Сюда вставляй любой код
         end
-    }
+    },
     {
         ["Name"] = "Tp object: hot key Home",
         ["Callback"] = function()
