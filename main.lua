@@ -109,14 +109,21 @@ local function LoadButtons()
     end)
 
     if success then
-        local buttonList = loadstring(response)()
-        if type(buttonList) == "table" then
-            for _, item in ipairs(buttonList) do
-                AddButton(item.Name, item.Callback)
+        local func, err = loadstring(response) 
+        if func then
+            local dataSuccess, buttonList = pcall(func) 
+            if dataSuccess and type(buttonList) == "table" then
+                for _, item in ipairs(buttonList) do
+                    AddButton(item.Name, item.Callback)
+                end
+            else
+                AddButton("Ошибка данных в BTS.lua", function() print("Ошибка в таблице") end)
             end
+        else
+            AddButton("Ошибка синтаксиса в BTS.lua", function() print(err) end)
         end
     else
-        AddButton("Ошибка загрузки!", function() print("Check URL") end)
+        AddButton("Ошибка загрузки URL", function() print("Check URL") end)
     end
 end
 
