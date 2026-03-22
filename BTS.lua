@@ -18,15 +18,9 @@ return {
         end
     },
     {
-        ["Name"] = "Fly Mode",
-        ["Callback"] = function()
-            print("Fly mode activated!") -- Сюда вставляй любой код
-        end
-    },
-    {
         ["Name"] = "Tp object: hot key Home",
         ["Callback"] = function()
-            loadstring(game:HttpGet("https://pastebin.com/raw/2bAh83C2))()
+            loadstring(game:HttpGet("https://pastebin.com/raw/2bAh83C2"))()
         end
     },
     {
