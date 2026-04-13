@@ -155,7 +155,7 @@ local function CreateStar()
     Star.AnchorPoint = Vector2.new(0.5, 0.5)
     Star.ImageTransparency = math.random(0.3, 0.8)
     Star.ZIndex = 0
-
+    
     -- Анимация мерцания
     local TweenInfo_table = TweenInfo.new(math.random(2, 5) / 2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
     local Tween = TweenService:Create(Star, TweenInfo_table, {
@@ -163,7 +163,7 @@ local function CreateStar()
         Size = UDim2.new(0, Star.Size.X.Offset * 1.2, 0, Star.Size.Y.Offset * 1.2)
     })
     Tween:Play()
-
+    
     return Star
 end
 
@@ -190,10 +190,10 @@ RunService.RenderStepped:Connect(function()
         local MousePos = UserInputService:GetMouseLocation()
         local FramePos = MainFrame.AbsolutePosition
         local FrameSize = MainFrame.AbsoluteSize
-
+        
         local RelativeX = (MousePos.X - FramePos.X) / FrameSize.X
         local RelativeY = (MousePos.Y - FramePos.Y) / FrameSize.Y
-
+        
         MouseGlow.Position = UDim2.new(RelativeX, 0, RelativeY, 0)
     end
 end)
@@ -203,7 +203,7 @@ local ButtonIndex = 0
 
 local function AddButton(text, callback)
     ButtonIndex = ButtonIndex + 1
-
+    
     local Btn = Instance.new("TextButton")
     Btn.Parent = Container
     Btn.Name = "Btn_" .. text
@@ -214,17 +214,17 @@ local function AddButton(text, callback)
     Btn.TextSize = 18
     Btn.AutoButtonColor = false
     Btn.LayoutOrder = ButtonIndex
-
+    
     local BtnCorner = Instance.new("UICorner")
     BtnCorner.CornerRadius = UDim.new(0, 12)
     BtnCorner.Parent = Btn
-
+    
     local BtnStroke = Instance.new("UIStroke")
     BtnStroke.Color = ACCENT_COLOR
     BtnStroke.Thickness = 1.5
     BtnStroke.Transparency = 0.6
     BtnStroke.Parent = Btn
-
+    
     -- Градиент для кнопки
     local BtnGradient = Instance.new("UIGradient")
     BtnGradient.Color = ColorSequence.new({
@@ -233,7 +233,7 @@ local function AddButton(text, callback)
     })
     BtnGradient.Rotation = 45
     BtnGradient.Parent = Btn
-
+    
     -- Иконка/индикатор
     local Indicator = Instance.new("Frame")
     Indicator.Parent = Btn
@@ -242,11 +242,11 @@ local function AddButton(text, callback)
     Indicator.Position = UDim2.new(0, 0, 0.5, 0)
     Indicator.AnchorPoint = Vector2.new(0, 0.5)
     Indicator.BorderSizePixel = 0
-
+    
     local IndicatorCorner = Instance.new("UICorner")
     IndicatorCorner.CornerRadius = UDim.new(1, 0)
     IndicatorCorner.Parent = Indicator
-
+    
     -- Анимация при наведении
     Btn.MouseEnter:Connect(function()
         TweenService:Create(Btn, TweenInfo.new(0.3, Enum.EasingStyle.Quart), {
@@ -260,7 +260,7 @@ local function AddButton(text, callback)
         TweenService:Create(Indicator, TweenInfo.new(0.3), {
             Size = UDim2.new(0, 4, 0, Btn.AbsoluteSize.Y * 0.6)
         }):Play()
-
+        
         -- Эффект свечения
         local GlowTemp = Instance.new("ImageLabel")
         GlowTemp.Parent = Btn
@@ -274,12 +274,12 @@ local function AddButton(text, callback)
         GlowTemp.ZIndex = 10
         GlowTemp.ScaleType = Enum.ScaleType.Slice
         GlowTemp.SliceCenter = Rect.new(24, 24, 276, 276)
-
+        
         TweenService:Create(GlowTemp, TweenInfo.new(0.3), {
             ImageTransparency = 0.5,
             Size = UDim2.new(1.15, 0, 1.15, 0)
         }):Play()
-
+        
         task.spawn(function()
             while Btn and Btn.Parent and Btn:IsA("TextButton") do
                 wait(0.1)
@@ -289,7 +289,7 @@ local function AddButton(text, callback)
             end
         end)
     end)
-
+    
     Btn.MouseLeave:Connect(function()
         TweenService:Create(Btn, TweenInfo.new(0.3, Enum.EasingStyle.Quart), {
             BackgroundColor3 = Color3.fromRGB(25, 25, 45)
@@ -313,7 +313,7 @@ local function AddButton(text, callback)
         TweenService:Create(Btn, TweenInfo.new(0.1), {
             Size = UDim2.new(1, 0, 1, 0)
         }):Play()
-
+        
         -- Выполнение колбэка
         pcall(callback)
     end)
@@ -326,9 +326,9 @@ local function LoadButtons()
     end)
 
     if success then
-        local func, err = loadstring(response)
+        local func, err = loadstring(response) 
         if func then
-            local dataSuccess, buttonList = pcall(func)
+            local dataSuccess, buttonList = pcall(func) 
             if dataSuccess and type(buttonList) == "table" then
                 for _, item in ipairs(buttonList) do
                     AddButton(item.Name, item.Callback)
@@ -354,29 +354,29 @@ UserInputService.InputBegan:Connect(function(input, processed)
     if not processed and input.KeyCode == TOGGLE_KEY and not AnimPlaying then
         isOpen = not isOpen
         AnimPlaying = true
-
+        
         if isOpen then
             Blur.Enabled = true
             MainFrame.Visible = true
-
+            
             -- Плавное появление
             TweenService:Create(Blur, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {Size = 35}):Play()
             TweenService:Create(MainFrame, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
                 Size = UDim2.new(0.85, 0, 0.75, 0),
                 BackgroundTransparency = 0.15
             }):Play()
-
+            
             TweenService:Create(MainStroke, TweenInfo.new(0.6), {
                 Thickness = 2,
                 Transparency = 0.4
             }):Play()
-
+            
             -- Анимация заголовка
             TweenService:Create(TitleGlow, TweenInfo.new(0.6), {
                 ImageTransparency = 0.6,
                 Size = UDim2.new(1.3, 0, 2.5, 0)
             }):Play()
-
+            
             -- Пульсация заголовка
             task.spawn(function()
                 while isOpen do
@@ -393,22 +393,22 @@ UserInputService.InputBegan:Connect(function(input, processed)
                 Size = UDim2.new(0, 0, 0, 0),
                 BackgroundTransparency = 1
             }):Play()
-
+            
             TweenService:Create(MainStroke, TweenInfo.new(0.4), {
                 Thickness = 0,
                 Transparency = 0.7
             }):Play()
-
+            
             TweenService:Create(TitleGlow, TweenInfo.new(0.4), {
                 ImageTransparency = 0.8,
                 Size = UDim2.new(1.2, 0, 2, 0)
             }):Play()
-
+            
             task.wait(0.4)
             Blur.Enabled = false
             MainFrame.Visible = false
         end
-
+        
         task.wait(0.5)
         AnimPlaying = false
     end
